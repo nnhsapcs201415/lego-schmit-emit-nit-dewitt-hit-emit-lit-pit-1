@@ -1,9 +1,13 @@
 import lejos.nxt.Sound;
-class FinalRobotMusic extends Thread {
-    public void run() {
-        while(true) {
-            try {
-
+import lejos.nxt.Button;
+class FinalRobotMusic extends Thread 
+{
+    private Thread t;
+    public void run() 
+    {
+        while (!Button.ESCAPE.isPressed()) {
+            try 
+            {
                 int RT = -1;
                 int A1 = 880;
                 int B1 = 988;
@@ -174,18 +178,28 @@ class FinalRobotMusic extends Thread {
                     };
                 for (int a = 0; a < arr.length; a += 3)
                 {
-                    if (arr[a] != -1)
-                    {
-                        //System.out.println(arr[a] + " " + arr[a + 1] + " " + arr[a+2]);
-                        Sound.playTone(arr[a], arr[a + 1]);
-                        Thread.sleep(arr[a + 2]);
-                    } else {
-                        Thread.sleep(200);
-                        a -= 2;
+                    if (!Button.ESCAPE.isPressed()) {
+                        if (arr[a] != -1)
+                        {
+                            //System.out.println(arr[a] + " " + arr[a + 1] + " " + arr[a+2]);
+                            Sound.playTone(arr[a], arr[a + 1]);
+                            Thread.sleep(arr[a + 2]);
+                        } else {
+                            Thread.sleep(200);
+                            a -= 2;
+                        }
                     }
                 }
-            } catch (InterruptedException ie) {
+            }catch (InterruptedException ie) {
             }
+        }
+    }
+
+    public void start () {
+        System.out.println("Starting music");
+        if (t == null) {
+            t = new Thread(this);
+            t.start();
         }
     }
 }
